@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Observable } from "../Observable";
 import { UserObserver } from "../UserObserver";
+import { Sync } from "./Sync";
 
 export interface UserProps {
   id?: number;
@@ -9,6 +10,10 @@ export interface UserProps {
 }
 
 export class User extends Observable<UserObserver> {
+  private sync: Sync<UserProps> = new Sync<UserProps>(
+    "http://localhost:3000/users"
+  );
+
   constructor(private data: UserProps) {
     super();
   }
@@ -26,22 +31,5 @@ export class User extends Observable<UserObserver> {
   set(updated: UserProps) {
     Object.assign(this.data, updated);
     this.notifyObservers();
-  }
-
-  async fetch(): void {
-    const response: AxiosResponse = await axios.get(
-      `http://localhost:3000/users/${this.get("id")}`
-    );
-
-    this.set(response.data);
-  }
-
-  async save(): void {
-    const id = this.get("id");
-    if (id) {
-      axios.put(`http://localhost:3000/users/${id}`, this.data);
-    } else {
-      axios.post(`http://localhost:3000/users`, this.data);
-    }
   }
 }
