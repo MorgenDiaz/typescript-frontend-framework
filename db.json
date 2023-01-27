@@ -1,0 +1,41 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "author": "typicode"
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  },
+  "users": [
+    {
+      "id": 1,
+      "name": "morgen",
+      "age": 97
+    },
+    {
+      "name": "Morgen",
+      "age": 29,
+      "id": 2
+    },
+    {
+      "name": "Lilia",
+      "age": 21,
+      "id": 3
+    },
+    {
+      "name": "morgen",
+      "age": 21,
+      "id": 4
+    }
+  ]
+}
