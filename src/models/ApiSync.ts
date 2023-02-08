@@ -4,7 +4,7 @@ interface Syncable {
   id?: number;
 }
 
-export class Sync<T extends Syncable> {
+export class ApiSync<T extends Syncable> {
   constructor(public rootUrl: string) {}
 
   async fetch(id: number): AxiosPromise<T> {

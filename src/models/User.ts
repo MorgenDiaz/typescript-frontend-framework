@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
-import { Observable } from "../Observable";
 import { UserObserver } from "../UserObserver";
 import { Attributes } from "./Attributes";
-import { Sync } from "./Sync";
+import { Model } from "./Model";
+import { ApiSync } from "./ApiSync";
 
 export interface UserProps {
   id?: number;
@@ -10,45 +10,17 @@ export interface UserProps {
   age?: number;
 }
 
-export class User extends Observable<UserObserver> {
-  private sync: Sync<UserProps> = new Sync<UserProps>(
-    "http://localhost:3000/users"
-  );
+export class User extends Model<UserProps, UserObserver> {
+  constructor(data: UserProps) {
+    const sync = new ApiSync("https://localhost:3000/users");
+    const attributes = new Attributes<UserProps>(data);
 
-  private attributes: Attributes<UserProps>;
-
-  constructor(private data: UserProps) {
-    super();
-    this.attributes = new Attributes<UserProps>(data);
+    super(sync, attributes);
   }
 
-  get get() {
-    return this.attributes.get;
-  }
-
-  set(update: UserProps) {
-    this.attributes.set(update);
-    this.sync.save(this.attributes.getAll());
-    this.notifyObservers();
-  }
-
-  fetch(): void {
-    const id = this.attributes.get("id");
-
-    if (typeof id !== "number") {
-      throw new Error("This record doesn't exist");
-    }
-
-    (async () => {
-      console.log("triggered!");
-      const response = await this.sync.fetch(id);
-      this.set(response.data);
-    })();
-  }
-
-  private notifyObservers() {
+  protected notifyObservers = () => {
     for (let listener of this.listeners) {
-      listener.handleUserDataChanged(this.attributes.getAll());
+      listener.handleUserDataChanged(this.getAll());
     }
-  }
+  };
 }
