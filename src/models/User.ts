@@ -12,7 +12,7 @@ export interface UserProps {
 
 export class User extends Model<UserProps, UserObserver> {
   constructor(data: UserProps) {
-    const sync = new ApiSync("https://localhost:3000/users");
+    const sync = new ApiSync("http://localhost:3000/users");
     const attributes = new Attributes<UserProps>(data);
 
     super(sync, attributes);

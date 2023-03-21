@@ -1,18 +1,25 @@
-import { User } from "./models/User";
+import { Collection, CollectionObserver } from "./models/Collection";
+import { User, UserProps } from "./models/User";
 import { UserObserver } from "./UserObserver";
 
-const user = new User({ id: 1, name: "Lilia", age: 97 });
-
-const userObserver: UserObserver = {
-  handleUserDataChanged(data) {
-    alert(data.name);
+const collectionObserver: CollectionObserver = {
+  onUpdate() {
+    console.log(users.models);
+    users.models[0].registerListener(userObserver);
+    users.models[0].set({ name: "Quagmire!" });
   },
 };
 
-user.registerListener(userObserver);
+const userObserver: UserObserver = {
+  handleUserDataChanged(data: UserProps) {
+    alert(`quah chuh! ${data.name}`);
+  },
+};
 
-console.log(user.get("name"));
-user.set({ name: "morgen" });
-//user.save();
+const users = new Collection<User, UserProps>(
+  "http://localhost:3000/users",
+  (jsonUser) => new User(jsonUser)
+);
 
-user.fetch();
+users.registerListener(collectionObserver);
+users.fetch();

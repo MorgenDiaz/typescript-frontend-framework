@@ -13,7 +13,7 @@ interface Sync<T> {
   save(data: T): AxiosPromise;
 }
 
-interface HasId {
+export interface HasId {
   id?: number;
 }
 
@@ -22,13 +22,9 @@ export abstract class Model<T extends HasId, O> extends Observable<O> {
     super();
   }
 
-  get get() {
-    return this.attributes.get;
-  }
+  get = this.attributes.get;
 
-  get getAll() {
-    return this.attributes.getAll;
-  }
+  getAll = this.attributes.getAll;
 
   set(update: T) {
     this.attributes.set(update);
