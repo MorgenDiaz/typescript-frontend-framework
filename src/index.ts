@@ -1,25 +1,25 @@
-import { Collection, CollectionObserver } from "./models/Collection";
+import { CollectionObserver } from "./models/Collection";
 import { User, UserProps } from "./models/User";
 import { UserObserver } from "./UserObserver";
+import { UserForm } from "./views/UsersForm";
+
+const users = User.buildUserCollection();
 
 const collectionObserver: CollectionObserver = {
   onUpdate() {
     console.log(users.models);
-    users.models[0].registerListener(userObserver);
     users.models[0].set({ name: "Quagmire!" });
+
+    const root = document.getElementById("root");
+
+    if (root) {
+      const userForm = new UserForm(root, users.models[0]);
+      userForm.render();
+    } else {
+      throw new Error("Root element not found.");
+    }
   },
 };
-
-const userObserver: UserObserver = {
-  handleUserDataChanged(data: UserProps) {
-    alert(`quah chuh! ${data.name}`);
-  },
-};
-
-const users = new Collection<User, UserProps>(
-  "http://localhost:3000/users",
-  (jsonUser) => new User(jsonUser)
-);
 
 users.registerListener(collectionObserver);
 users.fetch();

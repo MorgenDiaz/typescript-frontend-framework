@@ -3,6 +3,7 @@ import { UserObserver } from "../UserObserver";
 import { Attributes } from "./Attributes";
 import { Model } from "./Model";
 import { ApiSync } from "./ApiSync";
+import { Collection } from "./Collection";
 
 export interface UserProps {
   id?: number;
@@ -23,4 +24,16 @@ export class User extends Model<UserProps, UserObserver> {
       listener.handleUserDataChanged(this.getAll());
     }
   };
+
+  static buildUserCollection(): Collection<User, UserProps> {
+    return new Collection<User, UserProps>(
+      "http://localhost:3000/users",
+      (jsonUser) => new User(jsonUser)
+    );
+  }
+
+  setRandomAge(): void {
+    const age = Math.round(Math.random() * 100);
+    this.set({ age });
+  }
 }
