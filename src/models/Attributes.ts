@@ -8,7 +8,6 @@ export class Attributes<T> {
   set = (updated: T | T[keyof T] | undefined): void => {
     if (updated !== undefined && typeof this.data === "object") {
       this.data = { ...this.data, ...updated };
-      console.log("set to ", this.data);
     }
   };
 

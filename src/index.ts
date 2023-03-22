@@ -1,8 +1,7 @@
 import { CollectionObserver } from "./models/Collection";
 import { User, UserProps } from "./models/User";
-import { UserObserver } from "./UserObserver";
-import { UserForm } from "./views/UsersForm";
-
+import { UserObserver } from "./ModelObserver";
+import { UserEdit } from "./views/UserEdit";
 const users = User.buildUserCollection();
 
 const collectionObserver: CollectionObserver = {
@@ -13,8 +12,8 @@ const collectionObserver: CollectionObserver = {
     const root = document.getElementById("root");
 
     if (root) {
-      const userForm = new UserForm(root, users.models[0]);
-      userForm.render();
+      const userEdit = new UserEdit(root, users.models[0]);
+      userEdit.render();
     } else {
       throw new Error("Root element not found.");
     }

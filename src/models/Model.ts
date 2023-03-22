@@ -1,5 +1,6 @@
 import { AxiosPromise } from "axios";
 import { Observable } from "../Observable";
+import { ModelObserver } from "../ModelObserver";
 import { Attributes } from "./Attributes";
 
 interface ModelAttributes<T> {
@@ -17,7 +18,7 @@ export interface HasId {
   id?: number;
 }
 
-export abstract class Model<T extends HasId, O> extends Observable<O> {
+export abstract class Model<T extends HasId> extends Observable<ModelObserver> {
   constructor(private sync: Sync<T>, private attributes: ModelAttributes<T>) {
     super();
   }
@@ -29,6 +30,7 @@ export abstract class Model<T extends HasId, O> extends Observable<O> {
   set(update: T) {
     this.attributes.set(update);
     this.sync.save(this.attributes.getAll());
+    alert(JSON.stringify(this.attributes.getAll()));
     this.notifyObservers();
   }
 
